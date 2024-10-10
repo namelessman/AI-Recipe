@@ -7,6 +7,7 @@ import {
   UserButton,
   useUser,
 } from "@clerk/clerk-react";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
 
 interface Fav {
@@ -21,8 +22,9 @@ function App() {
   const [instructions, setInstructions] = useState<string>("");
   const [result, setResult] = useState<string>("");
   const [fav, setFav] = useState<Fav[]>([]);
+  const [refresh, setRefresh] = useState<number>(0);
 
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { user } = useUser();
   const baseUrl = "https://65ad-202-74-210-235.ngrok-free.app";
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function App() {
       .then((data) => {
         setFav(data);
       });
-  }, [user?.id]);
+  }, [user?.id, refresh]);
 
   const onSave = async () => {
     const userId = user.id;
@@ -54,6 +56,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         alert("saved");
+        setRefresh(refresh + 1);
       });
   };
 
@@ -132,7 +135,12 @@ function App() {
         </div>
 
         <div style={{ width: "50%", padding: "0.5rem" }}>
-          <TextArea value={result} readOnly style={{ minHeight: 300 }} />
+          {/* <TextArea value={result} readOnly style={{ minHeight: 300 }} /> */}
+          <Card style={{ minHeight: 300 }}>
+            <ReactMarkdown style={{ minHeight: 300, border: "1px solid #eee" }}>
+              {result}
+            </ReactMarkdown>
+          </Card>
           <SignedIn>
             <Button
               style={{ marginTop: "1rem" }}
