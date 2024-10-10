@@ -1,14 +1,98 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextArea, Card, Button, Text } from "@radix-ui/themes";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/clerk-react";
 import "./App.css";
+
+interface Fav {
+  create_date: string;
+  id: number;
+  user_id: string;
+  message: string;
+}
 
 function App() {
   const [ingredient, setIngredient] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
   const [result, setResult] = useState<string>("");
+  const [fav, setFav] = useState<Fav[]>([]);
+
+  const { isSignedIn, user, isLoaded } = useUser();
+  const baseUrl = "https://65ad-202-74-210-235.ngrok-free.app";
+
+  useEffect(() => {
+    if (!user?.id) {
+      return;
+    }
+    fetch(`${baseUrl}/cook_list/${user.id}`, {
+      method: "GET",
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFav(data);
+      });
+  }, [user?.id]);
+
+  const onSave = async () => {
+    const userId = user.id;
+    const cookMessage = result;
+    fetch(`${baseUrl}//saveCookMessage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, cookMessage }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("saved");
+      });
+  };
+
+  const generate = () => {
+    fetch(`${baseUrl}/getFoodSmart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ingredients: ingredient,
+        instructions: instructions,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setResult(data.message);
+      });
+  };
   return (
     <>
-      <h1>AI Recipe</h1>
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "0.2rem",
+          marginBottom: "1rem",
+        }}
+      >
+        <Text size="8" weight="bold">
+          AI Recipe
+        </Text>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+      </header>
       <div style={{ display: "flex" }}>
         <div style={{ width: "50%", padding: "0.5rem" }}>
           <Card>
@@ -39,7 +123,7 @@ function App() {
           <Button
             disabled={!ingredient || !instructions}
             onClick={() => {
-              console.log(ingredient, instructions);
+              generate();
             }}
             style={{ marginTop: "1rem" }}
           >
@@ -48,11 +132,34 @@ function App() {
         </div>
 
         <div style={{ width: "50%", padding: "0.5rem" }}>
-          <TextArea readOnly style={{ minHeight: 300 }} />
-          <Button style={{ marginTop: "1rem" }} disabled={!result}>
-            Save
-          </Button>
+          <TextArea value={result} readOnly style={{ minHeight: 300 }} />
+          <SignedIn>
+            <Button
+              style={{ marginTop: "1rem" }}
+              disabled={!result}
+              onClick={() => {
+                onSave();
+              }}
+            >
+              Save
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <Text>You need to login to save the recipe</Text>
+          </SignedOut>
         </div>
+      </div>
+      <div>
+        {fav.map((item) => (
+          <Card key={item.id} style={{ marginTop: "1rem" }}>
+            <Text as="div" size="4" weight="bold">
+              {item.create_date}
+            </Text>
+            <Text as="div" size="3" style={{ marginTop: "0.5rem" }}>
+              {item.message}
+            </Text>
+          </Card>
+        ))}
       </div>
     </>
   );
