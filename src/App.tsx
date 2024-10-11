@@ -174,7 +174,7 @@ function App() {
             </Button>
           </SignedIn>
           <SignedOut>
-            <Callout.Root>
+            <Callout.Root style={{ marginTop: "0.5rem" }}>
               <Callout.Text>
                 If you want to save the recipe, please sign in
               </Callout.Text>
