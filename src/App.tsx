@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { TextArea, Card, Button, Text, Callout } from "@radix-ui/themes";
+import {
+  TextArea,
+  Card,
+  Button,
+  Text,
+  Callout,
+  AlertDialog,
+  Flex,
+} from "@radix-ui/themes";
 import {
   SignedIn,
   SignedOut,
@@ -55,7 +63,18 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert("saved");
+        // alert("saved");
+        setRefresh(refresh + 1);
+      });
+  };
+
+  const onRemove = (id: number) => {
+    fetch(`${baseUrl}/cook_list/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // alert("removed");
         setRefresh(refresh + 1);
       });
   };
@@ -107,7 +126,7 @@ function App() {
             <TextArea
               resize="vertical"
               style={{ marginTop: "0.5rem" }}
-              placeholder="Enter ingredients here, onion, tomato, ..."
+              placeholder="Enter ingredients here: onion, tomato, beef ..."
               value={ingredient}
               onChange={(e) => setIngredient(e.target.value)}
             />
@@ -119,7 +138,7 @@ function App() {
             <TextArea
               resize="vertical"
               style={{ marginTop: "0.5rem" }}
-              placeholder="Enter instructions here, make a salad, ..."
+              placeholder="Enter instructions here: make a traditional Maori food, add more ingridents if needed ..."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
             />
@@ -169,10 +188,47 @@ function App() {
         </Text>
         <div>
           {fav.map((item) => (
-            <Card key={item.id} style={{ marginTop: "1rem" }}>
+            <Card
+              key={item.id}
+              style={{ marginTop: "1rem", position: "relative" }}
+            >
               <Text as="div" size="3" style={{ marginTop: "0.5rem" }}>
                 <ReactMarkdown>{item.message}</ReactMarkdown>
               </Text>
+
+              <AlertDialog.Root>
+                <AlertDialog.Trigger>
+                  <Button
+                    color="red"
+                    style={{ position: "absolute", top: "1rem", right: "1rem" }}
+                  >
+                    Remove
+                  </Button>
+                </AlertDialog.Trigger>
+                <AlertDialog.Content maxWidth="450px">
+                  <AlertDialog.Title>Remove recipe</AlertDialog.Title>
+                  <AlertDialog.Description size="2">
+                    Are you sure? You can't undo this action afterwards.
+                  </AlertDialog.Description>
+
+                  <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                      <Button variant="soft" color="gray">
+                        Cancel
+                      </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                      <Button
+                        variant="solid"
+                        color="red"
+                        onClick={() => onRemove(item.id)}
+                      >
+                        Remove
+                      </Button>
+                    </AlertDialog.Action>
+                  </Flex>
+                </AlertDialog.Content>
+              </AlertDialog.Root>
             </Card>
           ))}
         </div>
