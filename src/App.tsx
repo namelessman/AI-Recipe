@@ -96,7 +96,7 @@ function App() {
       });
   };
   return (
-    <>
+    <div style={{ padding: "1rem" }}>
       <header
         style={{
           display: "flex",
@@ -233,7 +233,7 @@ function App() {
           ))}
         </div>
       </SignedIn>
-    </>
+    </div>
   );
 }
 
