@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TextArea, Card, Button, Text } from "@radix-ui/themes";
+import { TextArea, Card, Button, Text, Callout } from "@radix-ui/themes";
 import {
   SignedIn,
   SignedOut,
@@ -25,7 +25,7 @@ function App() {
   const [refresh, setRefresh] = useState<number>(0);
 
   const { user } = useUser();
-  const baseUrl = "https://65ad-202-74-210-235.ngrok-free.app";
+  const baseUrl = "https://65af-202-74-210-235.ngrok-free.app";
 
   useEffect(() => {
     if (!user?.id) {
@@ -93,7 +93,9 @@ function App() {
           <UserButton />
         </SignedIn>
         <SignedOut>
-          <SignInButton />
+          <SignInButton>
+            <Button>Sign in</Button>
+          </SignInButton>
         </SignedOut>
       </header>
       <div style={{ display: "flex" }}>
@@ -143,7 +145,7 @@ function App() {
           </Card>
           <SignedIn>
             <Button
-              style={{ marginTop: "1rem" }}
+              style={{ marginTop: "1rem", marginBottom: "1rem" }}
               disabled={!result}
               onClick={() => {
                 onSave();
@@ -153,22 +155,28 @@ function App() {
             </Button>
           </SignedIn>
           <SignedOut>
-            <Text>You need to login to save the recipe</Text>
+            <Callout.Root>
+              <Callout.Text>
+                If you want to save the recipe, please sign in
+              </Callout.Text>
+            </Callout.Root>
           </SignedOut>
         </div>
       </div>
-      <div>
-        {fav.map((item) => (
-          <Card key={item.id} style={{ marginTop: "1rem" }}>
-            <Text as="div" size="4" weight="bold">
-              {item.create_date}
-            </Text>
-            <Text as="div" size="3" style={{ marginTop: "0.5rem" }}>
-              {item.message}
-            </Text>
-          </Card>
-        ))}
-      </div>
+      <SignedIn>
+        <Text as="div" size="4" weight="bold" align="left">
+          Saved Recipe
+        </Text>
+        <div>
+          {fav.map((item) => (
+            <Card key={item.id} style={{ marginTop: "1rem" }}>
+              <Text as="div" size="3" style={{ marginTop: "0.5rem" }}>
+                <ReactMarkdown>{item.message}</ReactMarkdown>
+              </Text>
+            </Card>
+          ))}
+        </div>
+      </SignedIn>
     </>
   );
 }
