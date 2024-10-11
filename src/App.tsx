@@ -102,24 +102,24 @@ function App() {
         <div style={{ width: "50%", padding: "0.5rem" }}>
           <Card>
             <Text as="div" size="4" weight="bold">
-              Ingredients
+              Ingredients 🥬
             </Text>
             <TextArea
               resize="vertical"
               style={{ marginTop: "0.5rem" }}
-              placeholder="Enter ingredients here"
+              placeholder="Enter ingredients here, onion, tomato, ..."
               value={ingredient}
               onChange={(e) => setIngredient(e.target.value)}
             />
           </Card>
           <Card style={{ marginTop: "1rem" }}>
             <Text as="div" size="4" weight="bold">
-              Instructions
+              Instructions 📝
             </Text>
             <TextArea
               resize="vertical"
               style={{ marginTop: "0.5rem" }}
-              placeholder="Enter instructions here"
+              placeholder="Enter instructions here, make a salad, ..."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
             />
@@ -165,7 +165,7 @@ function App() {
       </div>
       <SignedIn>
         <Text as="div" size="4" weight="bold" align="left">
-          Saved Recipe
+          Saved Recipe 📖
         </Text>
         <div>
           {fav.map((item) => (
