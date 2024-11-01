@@ -33,7 +33,7 @@ function App() {
   const [refresh, setRefresh] = useState<number>(0);
 
   const { user } = useUser();
-  const baseUrl = "https://65af-202-74-210-235.ngrok-free.app";
+  const baseUrl = "https://1217-202-74-210-235.ngrok-free.app";
 
   useEffect(() => {
     if (!user?.id) {
@@ -96,7 +96,7 @@ function App() {
       });
   };
   return (
-    <div style={{ padding: "1rem" }}>
+    <div style={{ padding: "1rem", borderRadius: "20px", overflow: "hidden" }}>
       <header
         style={{
           display: "flex",

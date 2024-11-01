@@ -5,7 +5,7 @@
   text-align: center;
 }
 body {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 255, 255, 0.5);
   background-image: 
         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><text x="10" y="40" font-size="40" opacity="0.5">🥕</text><text x="60" y="40" font-size="40" opacity="0.5">🥬</text><text x="110" y="40" font-size="40" opacity="0.5">🍅</text><text x="160" y="40" font-size="40" opacity="0.5">🌽</text><text x="10" y="100" font-size="40" opacity="0.5">🍆</text><text x="60" y="100" font-size="40" opacity="0.5">🥔</text><text x="110" y="100" font-size="40" opacity="0.5">🧄</text><text x="160" y="100" font-size="40" opacity="0.5">🧅</text></svg>');
   background-repeat: repeat;
